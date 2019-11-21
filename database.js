@@ -21,37 +21,35 @@ class Database {
       id: item.id,
       qty: item.qty,
       name: this.getProduct(item.id).name,
-      price: this.getProduct(item.id).price
+      price: this.getProduct(item.id).price,
     }));
   }
 
+
+  // Changes the cart to the current items
+
+  //NOT WORKING
+  editCart(items) {
+
+    this.storage.cart = items;
+  }
 
   //I FEEL LIKE THIS IS ALL WRONG...
   addItemsToCart(items) {
     items.forEach(item => {
       this.validateProductExists(item)
-
       //IS THIS LOGIC CORRECT?
-      if (this.storage.cart.includes(item.id)) {
-        let foundItem = this.storage.cart.find(cartItem => cartItem.id === item.id);
-        //DO I NEED TO PARSEINT THIS FOLLOWING LINE?
-        this.item.qty += foundItem.qty;
-        this.removeItemFromCart(item.id);
+      let foundItem = this.storage.cart.find(cartItem => cartItem.id === item.id);
+      if (foundItem.qty > 0) {
 
+        item.qty += foundItem.qty;
+        this.removeItemFromCart(item.id);
       }
 
     })
 
     this.storage.cart.push(...items)
-  }
 
-
-  //IS THERE A SIMPLER WAY TO CALCULATE THIS? DOES THIS EVEN WORK?
-  calculateCosts() {
-    this.getCart().forEach(item => {
-      this.totalCost += parseInt(item.price);
-    })
-    return this.totalCost;
   }
 
   // Generates a random order# between 0 and 10000.
@@ -61,7 +59,7 @@ class Database {
 
   // Removes a specific item from the current working cart.
   removeItemFromCart(id) {
-    const cart = this.storage.cart.filter(item => item.id === id);
+    let cart = this.storage.cart.filter(item => item.id === id);
     this.storage.cart = cart;
   }
 
@@ -75,7 +73,7 @@ class Database {
   }
 }
 
-// A mock storage containing the stores inventory.
+// A mock storage containing the store's inventory.
 const initialStorage = {
   cart: [{
     id: 1,
