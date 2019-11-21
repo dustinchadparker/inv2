@@ -18,22 +18,44 @@ class Database {
       id: item.id,
       qty: item.qty,
       name: this.getProduct(item.id).name,
-      price: item.price
+      price: this.getProduct(item.id).price
     }));
   }
 
+
+  //I FEEL LIKE THIS IS ALL WRONG...
   addItemsToCart(items) {
     items.forEach(item => {
       this.validateProductExists(item)
+
+      //is this logic correct?
+      if (this.storage.cart.includes(item.id)) {
+        let foundItem = this.storage.cart.find(cartItem => cartItem.id === item.id);
+        this.item.qty += foundItem.qty;
+        this.removeItemFromCart(item.id);
+
+      }
+
     })
 
-    // may want to filter out duplicate cart entires here.
-    // for example if I have 3 spoons in my cart
-    // and i make a request to add 2 more, it should
-    // update my spoon count to 5 instead of having
-    // one entry of 3 spoons and one entry of 2 spoons
-
     this.storage.cart.push(...items)
+  }
+
+
+  //IS THERE A SIMPLER WAY TO CALCULATE THIS? DOES THIS EVEN WORK?
+  calculateCosts() {
+
+    this.getCart().forEach(item => {
+      this.totalCost += parseInt(item.price);
+    })
+
+    return this.totalCost;
+
+  }
+
+  //generates random order number
+  orderNumber() {
+    return Math.floor(Math.random() * 10000);
   }
 
   removeItemFromCart(id) {
@@ -57,25 +79,25 @@ const initialStorage = {
     price: 10
   }],
   products: [{
-      id: 1,
-      price: 10,
-      name: 'cup'
-    },
-    {
-      id: 2,
-      price: 15,
-      name: 'plate'
-    },
-    {
-      id: 3,
-      price: 5,
-      name: 'spoon'
-    },
-    {
-      id: 4,
-      price: 5,
-      name: 'fork'
-    },
+    id: 1,
+    price: 10,
+    name: 'cup'
+  },
+  {
+    id: 2,
+    price: 15,
+    name: 'plate'
+  },
+  {
+    id: 3,
+    price: 5,
+    name: 'spoon'
+  },
+  {
+    id: 4,
+    price: 5,
+    name: 'fork'
+  },
   ]
 }
 

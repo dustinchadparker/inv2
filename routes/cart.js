@@ -28,6 +28,13 @@ router.get('/', function (req, res, next) {
   
   router.post('/checkout', function (req, res, next) {
     res.sendStatus(200);
+
+    const total = db.calculateCosts();
+    const orderNumber = db.orderNumber();
+
+    //THIS DOES NOT WORK -- WHY? BETTER WAY TO DO THIS OR DO I 
+    //JUST NEED TO RETURN ONLY THE VALUES?
+    res.send(<div><h1>#{orderNumber}</h1><br /><h1>${total}</h1></div>);
   })
 
   
