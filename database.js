@@ -1,18 +1,21 @@
-// fake data storage module
+//FAKE DATA ON LOCAL STORAGE
 
 class Database {
   constructor(initialStorage) {
     this.storage = initialStorage;
   }
 
+  // Returns all products currently in the store inventory.
   getProducts() {
     return this.storage.products;
   }
 
+  // Returns a specific product in the store inventory.
   getProduct(id) {
     return this.storage.products.find(product => product.id === id);
   }
 
+  // Retrieves the current working cart of the consumer.
   getCart() {
     return this.storage.cart.map(item => ({
       id: item.id,
@@ -28,9 +31,10 @@ class Database {
     items.forEach(item => {
       this.validateProductExists(item)
 
-      //is this logic correct?
+      //IS THIS LOGIC CORRECT?
       if (this.storage.cart.includes(item.id)) {
         let foundItem = this.storage.cart.find(cartItem => cartItem.id === item.id);
+        //DO I NEED TO PARSEINT THIS FOLLOWING LINE?
         this.item.qty += foundItem.qty;
         this.removeItemFromCart(item.id);
 
@@ -44,26 +48,25 @@ class Database {
 
   //IS THERE A SIMPLER WAY TO CALCULATE THIS? DOES THIS EVEN WORK?
   calculateCosts() {
-
     this.getCart().forEach(item => {
       this.totalCost += parseInt(item.price);
     })
-
     return this.totalCost;
-
   }
 
-  //generates random order number
+  // Generates a random order# between 0 and 10000.
   orderNumber() {
     return Math.floor(Math.random() * 10000);
   }
 
+  // Removes a specific item from the current working cart.
   removeItemFromCart(id) {
     const cart = this.storage.cart.filter(item => item.id === id);
     this.storage.cart = cart;
   }
 
-  // cart validations
+  /** Checks to see if the product to be added even exists (or
+    * possibly if it's in stock). */
   validateProductExists(item) {
     const product = this.getProduct(item.id);
     if (!product) {
@@ -72,6 +75,7 @@ class Database {
   }
 }
 
+// A mock storage containing the stores inventory.
 const initialStorage = {
   cart: [{
     id: 1,

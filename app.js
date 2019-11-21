@@ -10,7 +10,7 @@ let productsRouter = require('./routes/cart');
 
 let app = express();
 
-// view engine setup
+// Setup for the view engine.
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -22,22 +22,23 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Allows the use of specific modules based on the url endpoints.
 app.use('/', indexRouter);
 app.use('/cart', cartRouter);
 app.use('/products', productsRouter);
 
-// catch 404 and forward to error handler
+// Throws an error if none of the above are found.
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// Error handler.
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
+  // Throws a 500, and gives error.
   res.status(err.status || 500);
   res.render('error');
 });

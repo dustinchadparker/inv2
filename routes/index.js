@@ -1,7 +1,7 @@
 let express = require('express');
 let router = express.Router();
 
-/* GET home page. */
+// Displays a homepage on the most base route.
 router.get('/', function (req, res, next) {
   res.render('index', {
     title: 'Express'

@@ -2,11 +2,13 @@ let express = require('express');
 let router = express.Router();
 let db = require('../database');
 
+// Retrieves the current working cart.
 router.get('/', function (req, res, next) {
     const cart = db.getCart();
     res.send(cart)
   })
   
+  // Adds the specified items to the current cart. 
   router.post('/', function (req, res, next) {
     const items = req.body
     try {
@@ -19,6 +21,7 @@ router.get('/', function (req, res, next) {
     res.send(cart);
   });
   
+  // Deletes a specific item from the current cart.
   router.delete('/:id', function (req, res, next) {
     const id = req.params.id
     db.removeItemFromCart(id)
@@ -26,7 +29,8 @@ router.get('/', function (req, res, next) {
     res.send(cart)
   })
   
-  router.post('/checkout', function (req, res, next) {
+  // Retrieves the total cost and order number of the items that were in the cart.
+  router.get('/checkout', function (req, res, next) {
     res.sendStatus(200);
 
     const total = db.calculateCosts();
