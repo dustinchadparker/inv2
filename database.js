@@ -27,28 +27,45 @@ class Database {
 
 
   // Changes the cart to the current items
-
-  //NOT WORKING
   editCart(items) {
-
     this.storage.cart = items;
   }
 
-  //I FEEL LIKE THIS IS ALL WRONG...
-  addItemsToCart(items) {
-    items.forEach(item => {
-      this.validateProductExists(item)
-      //IS THIS LOGIC CORRECT?
-      let foundItem = this.storage.cart.find(cartItem => cartItem.id === item.id);
-      if (foundItem.qty > 0) {
+  // Check to see if cart contains a specific item
+  cartContainsItem(item) {
+    return this.storage.cart.find(itemInCart => itemInCart.id === item.id)
+  }
 
-        item.qty += foundItem.qty;
-        this.removeItemFromCart(item.id);
-      }
+  // Adds new items to the cart
+  addItemsToCartWithoutDuplicates(itemsToAdd) {
 
+    // Sets a duplicate of the cart to modify
+    let updatedCart = this.storage.cart;
+
+    itemsToAdd.forEach(newItem => {
+      updatedCart.forEach(itemInCart => {
+
+        /** Compares new/added item to every cart item
+         *  If the added item is already somewhere in the cart, AND
+         *  if it's the same item being compared, remove the old entry
+         *  and add the new one with the updated quantity. */
+        if (this.cartContainsItem(newItem) && newItem.id === itemInCart.id) {
+          let newIt = { id: newItem.id, qty: (itemInCart.qty + newItem.qty) }
+          updatedCart = updatedCart.filter(i => i.id !== newItem.id);
+          updatedCart.push(newIt);
+
+          /** If the cart does NOT contain the item being compared
+           * AND the item does NOT already exist in the cart,
+           * add the new item!
+          */
+        } else if (!this.cartContainsItem(newItem) && newItem.id !== itemInCart.id) {
+          updatedCart.push(newItem)
+        } /** Otherwise, if the item being compared is already in the cart
+           *somewhere, but is NOT the one being compared, DO NOTHING. */
+
+        this.storage.cart = updatedCart;
+      })
     })
-
-    this.storage.cart.push(...items)
 
   }
 

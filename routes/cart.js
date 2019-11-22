@@ -13,7 +13,7 @@ router.post('/', function (req, res, next) {
   const items = req.body
 
   try {
-    db.addItemsToCart(items)
+    db.addItemsToCartWithoutDuplicates(items)
   } catch (error) {
     res.status(500).send(error)
     return
@@ -23,7 +23,7 @@ router.post('/', function (req, res, next) {
   res.send(cart);
 });
 
-// Edits the current cart. 
+// Edits/Updates the current cart to be whatever is here.
 router.put('/edit', function (req, res, next) {
   const items = req.body
 
@@ -50,7 +50,7 @@ router.get('/checkout', function (req, res, next) {
   let totalCost = 0;
 
   db.getCart().forEach(item => {
-    
+
     totalCost += (item.price * item.qty);
     console.log(totalCost);
   })
