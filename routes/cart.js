@@ -39,10 +39,10 @@ router.put('/edit', function (req, res, next) {
 
 // Deletes a specific item from the current cart.
 router.delete('/:id', function (req, res, next) {
-  const id = req.params.id
-  db.removeItemFromCart(id)
-  const cart = db.getCart()
-  res.send(cart)
+  const id = req.params.id;
+  db.removeItemFromCart(id);
+  const cart = db.getCart();
+  res.send(cart);
 })
 
 // Retrieves the total cost and order number of the items that were in the cart.

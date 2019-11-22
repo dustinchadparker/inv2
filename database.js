@@ -42,25 +42,28 @@ class Database {
     // Sets a duplicate of the cart to modify
     let updatedCart = this.storage.cart;
 
-    itemsToAdd.forEach(newItem => {
+    itemsToAdd.forEach(importedItem => {
+      this.validateProductExists(importedItem);
+
       updatedCart.forEach(itemInCart => {
 
         /** Compares new/added item to every cart item
          *  If the added item is already somewhere in the cart, AND
          *  if it's the same item being compared, remove the old entry
          *  and add the new one with the updated quantity. */
-        if (this.cartContainsItem(newItem) && newItem.id === itemInCart.id) {
-          let newIt = { id: newItem.id, qty: (itemInCart.qty + newItem.qty) }
-          updatedCart = updatedCart.filter(i => i.id !== newItem.id);
-          updatedCart.push(newIt);
+        if (this.cartContainsItem(importedItem) && importedItem.id === itemInCart.id) {
+          let replacementItem = { id: importedItem.id, qty: (itemInCart.qty + importedItem.qty) }
+          updatedCart = updatedCart.filter(cartItems => cartItems.id !== importedItem.id);
+          updatedCart.push(replacementItem);
 
           /** If the cart does NOT contain the item being compared
            * AND the item does NOT already exist in the cart,
            * add the new item!
           */
-        } else if (!this.cartContainsItem(newItem) && newItem.id !== itemInCart.id) {
-          updatedCart.push(newItem)
-        } /** Otherwise, if the item being compared is already in the cart
+        } else if (!this.cartContainsItem(importedItem) && importedItem.id !== itemInCart.id) {
+          updatedCart.push(importedItem);
+        }
+        /** Otherwise, if the item being compared is already in the cart
            *somewhere, but is NOT the one being compared, DO NOTHING. */
 
         this.storage.cart = updatedCart;
@@ -76,12 +79,13 @@ class Database {
 
   // Removes a specific item from the current working cart.
   removeItemFromCart(id) {
+    
     let cart = this.storage.cart.filter(item => item.id === id);
     this.storage.cart = cart;
   }
 
   /** Checks to see if the product to be added even exists (or
-    * possibly if it's in stock). */
+    * possibly if it's in stsock). */
   validateProductExists(item) {
     const product = this.getProduct(item.id);
     if (!product) {
@@ -97,6 +101,7 @@ const initialStorage = {
     qty: 1,
     price: 10
   }],
+
   products: [{
     id: 1,
     price: 10,
