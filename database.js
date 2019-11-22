@@ -79,7 +79,6 @@ class Database {
 
   // Removes a specific item from the current working cart.
   removeItemFromCart(id) {
-    
     let cart = this.storage.cart.filter(item => item.id === id);
     this.storage.cart = cart;
   }

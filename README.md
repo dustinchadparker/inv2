@@ -1,30 +1,18 @@
-Daxko Interview Project
-As part of the interview process, you will present a C# or JavaScript project that you
-have written (by yourself!) to our team of engineers. The purpose of this part of the
-interview is for us to evaluate your general knowledge of C# or JavaScript, good coding
-practices, and communication skills. Instead of asking you to write code on the fly on a
-whiteboard during the interview, we want to give you time to write code in a setting that
-you control with your own tools so that you can be well-prepared for your presentation.
-NOTE: we want to respect your time and do not expect you to go all out and spend
-many hours perfecting this project. Please find the right balance of time spent on the
-project to get to the point where we can have a good technical discussion around your
-code. If there are areas that you did not have enough time to complete, come prepared
-to discuss what you would change if you had more time.
-Project Summary: Create a simple shopping cart API that could be used to support a
-system that satisfies the user stories below (UI prototypes are included for context
-around what this system might look like; but for the purposes of this project only the
-supporting API, no UI, needs to be built).
+## Daxko Interview Project
 
-Product List User Story: As a consumer, I want to see a list of available products for
-order. I should be able to add multiple products to the shopping cart in one request.
+1. Product List User Story: As a consumer, I want to see a list of available products for order. 
 
-Shopping Cart User Story: As a consumer, I want to see what is in my shopping cart
-before checking out. I should be able to edit the quantities of each item in the cart and
-delete an item entirely from the cart. I should be able to checkout, creating an order for
-all of the items currently in the cart.
+2. I should be able to add multiple products to the shopping cart in one request.
 
-Order Confirmation User Story: As a consumer, I want to see a summary of my order
+3. As a consumer, I want to see what is in my shopping cart before checking out. 
+
+4. I should be able to edit the quantities of each item in the cart and
+
+5. delete an item entirely from the cart. 
+
+6. I should be able to checkout, creating an order for all of the items currently in the cart. As a consumer, I want to see a summary of my order
 after I’ve checked out.
+
 
 Technical notes
  There is no need to add functionality other than the user stories listed.
