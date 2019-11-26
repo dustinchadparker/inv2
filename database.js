@@ -40,35 +40,58 @@ class Database {
   addItemsToCartWithoutDuplicates(itemsToAdd) {
 
     // Sets a duplicate of the cart to modify
+
     let updatedCart = this.storage.cart;
 
+    // If cart starts empty, set a dummy item to prevent errors.
+    // Dummy item will be removed after.
+    if (updatedCart.length == 0) {
+      updatedCart = [{ id: 0, qty: 0 }]
+    }
+
     itemsToAdd.forEach(importedItem => {
+
+      //checks that item exists in store inventory
       this.validateProductExists(importedItem);
 
-      updatedCart.forEach(itemInCart => {
+      //checks that a negative value is not being added
+      if (importedItem.qty < 0) {
+        console.log('Can not add a negative quantity.');
+      } else {
 
-        /** Compares new/added item to every cart item
-         *  If the added item is already somewhere in the cart, AND
-         *  if it's the same item being compared, remove the old entry
-         *  and add the new one with the updated quantity. */
-        if (this.cartContainsItem(importedItem) && importedItem.id === itemInCart.id) {
-          let replacementItem = { id: importedItem.id, qty: (itemInCart.qty + importedItem.qty) }
-          updatedCart = updatedCart.filter(cartItems => cartItems.id !== importedItem.id);
-          updatedCart.push(replacementItem);
+        updatedCart.forEach(itemInCart => {
 
-          /** If the cart does NOT contain the item being compared
-           * AND the item does NOT already exist in the cart,
-           * add the new item!
-          */
-        } else if (!this.cartContainsItem(importedItem) && importedItem.id !== itemInCart.id) {
-          updatedCart.push(importedItem);
-        }
-        /** Otherwise, if the item being compared is already in the cart
-           *somewhere, but is NOT the one being compared, DO NOTHING. */
+              /** If the cart does NOT contain the item being compared
+               * AND the item does NOT already exist in the cart,
+               * add the new item!
+              */
+          
+          if (!this.cartContainsItem(importedItem) && importedItem.id !== itemInCart.id) {
+            updatedCart.push(importedItem);
+          }
 
-        this.storage.cart = updatedCart;
-      })
+          /** Compares new/added item to every cart item
+           *  If the added item is already somewhere in the cart, AND
+           *  if it's the same item being compared, remove the old entry
+           *  and add the new one with the updated quantity. */
+          else if (this.cartContainsItem(importedItem) && importedItem.id === itemInCart.id) {
+              let replacementItem = { id: importedItem.id, qty: (itemInCart.qty + importedItem.qty) }
+              updatedCart = updatedCart.filter(cartItems => cartItems.id != importedItem.id);
+              updatedCart.push(replacementItem);
+
+            }
+          /** Otherwise, if the item being compared is already in the cart
+             *somewhere, but is NOT the one being compared, DO NOTHING. */
+
+
+          this.storage.cart = updatedCart;
+        })
+      }
     })
+
+    // Removes the dummy item from cart.
+    this.removeItemFromCart(0);
+
 
   }
 
@@ -79,7 +102,7 @@ class Database {
 
   // Removes a specific item from the current working cart.
   removeItemFromCart(id) {
-    let cart = this.storage.cart.filter(item => item.id === id);
+    let cart = this.storage.cart.filter(item => item.id != id);
     this.storage.cart = cart;
   }
 
@@ -102,6 +125,10 @@ const initialStorage = {
   }],
 
   products: [{
+    id: 0,
+    price: 10,
+    name: 'cup'
+  }, {
     id: 1,
     price: 10,
     name: 'cup'
